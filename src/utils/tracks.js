@@ -21,3 +21,12 @@ export const getAvailableAnswers = (expectedId) => {
     ),
   ]);
 };
+
+export const getShuffledTracks = () => {
+  const tracks = available;
+  for (var i = tracks.length - 1; i > 0; i--) {
+    var rand = Math.floor(Math.random() * (i + 1));
+    [tracks[i], tracks[rand]] = [tracks[rand], tracks[i]];
+  }
+  return tracks;
+};

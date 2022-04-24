@@ -1,82 +1,49 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import useTimer from '@hooks/useTimer';
-import { getRandomTrack, getAvailableAnswers } from '@utils/tracks';
-import useAudio from '@hooks/useAudio';
-
-import Options from '@components/Options';
+import { getShuffledTracks } from '@utils/tracks';
 
 import {
   Container,
-  Countdown,
-  PlayAgain,
   StatusContainer,
   StatusDescription,
   StatusTitle,
+  PlayAgain,
 } from './Play.styles';
+import Levels from '../../components/Levels';
 
 function Play() {
-  const [status, setStatus] = useState('countdown');
-  const [track] = useState(getRandomTrack());
-
+  const [tracks] = useState(getShuffledTracks());
+  const [level, setLevel] = useState(1);
+  const [score, setScore] = useState(0);
   const navigate = useNavigate();
 
-  const { timeLeft } = useTimer({
-    stop: () => setStatus('choice'),
-    isRunning: status === 'countdown',
-    time: 5000,
-  });
-
-  const { play, pause } = useAudio({
-    url: `http://localhost:3001/${track.id}`,
-  });
-
-  const handleOptionClick = (clickedId) => {
-    pause();
-
-    if (clickedId === track.id) {
-      setStatus('success');
-    } else {
-      setStatus('failed');
-    }
+  const handleScore = (points) => {
+    setScore(score + points);
   };
 
-  useEffect(() => {
-    if (status === 'choice') {
-      play();
-    }
-  }, [status, play]);
+  const handleNextLevel = () => {
+    setLevel(level + 1);
+    console.log(level);
+  };
 
   return (
     <Container>
-      {status === 'countdown' && timeLeft && (
-        <Countdown>{timeLeft.seconds}</Countdown>
-      )}
-
-      {status === 'choice' && (
-        <Options
-          options={getAvailableAnswers(track.id)}
-          onOptionClick={handleOptionClick}
+      {level <= 3 ? (
+        <Levels
+          track={tracks[level - 1]}
+          handleScore={handleScore}
+          handleNextLevel={handleNextLevel}
+          key={level}
         />
-      )}
-
-      {status === 'success' && (
+      ) : (
         <StatusContainer>
           <StatusTitle>Parabéns!!!</StatusTitle>
-          <StatusDescription>Você conseguiu acertar a música</StatusDescription>
+          <StatusDescription>
+            Você conseguiu {score} ponto{score > 1 && 's'}!!
+          </StatusDescription>
           <PlayAgain type="button" onClick={() => navigate('/')}>
-            Jogar Novamente
-          </PlayAgain>
-        </StatusContainer>
-      )}
-
-      {status === 'failed' && (
-        <StatusContainer>
-          <StatusTitle>Não foi dessa vez...</StatusTitle>
-          <StatusDescription>Tente novamente na próxima</StatusDescription>
-          <PlayAgain type="button" onClick={() => navigate('/')}>
-            Jogar Novamente
+            Jogar novamente
           </PlayAgain>
         </StatusContainer>
       )}

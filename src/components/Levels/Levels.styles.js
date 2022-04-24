@@ -9,6 +9,11 @@ export const Container = styled.div`
   align-items: center;
 `;
 
+export const Countdown = styled.div`
+  font-size: 8rem;
+  font-weight: 700;
+`;
+
 export const StatusContainer = styled.div`
   max-width: 500px;
 
