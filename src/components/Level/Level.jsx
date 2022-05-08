@@ -26,7 +26,7 @@ function Level({ type, goToPhase }) {
     [tracks, type],
   );
 
-  const [, toggle, stop] = useMultiAudio(urls || []);
+  const [, toggle] = useMultiAudio(urls || []);
 
   const { track: expected } = useCorrectTrack();
 
@@ -76,12 +76,6 @@ function Level({ type, goToPhase }) {
 
   useEffect(() => {
     setSelected(undefined);
-
-    return () => {
-      stop();
-    };
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [type]);
 
   return (

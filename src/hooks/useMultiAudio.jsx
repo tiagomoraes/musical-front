@@ -65,6 +65,10 @@ const useMultiAudio = (urls) => {
           setPlayers(newPlayers);
         });
       });
+
+      players.forEach((p) => {
+        p.audio.pause();
+      });
     };
   }, [players]);
 
