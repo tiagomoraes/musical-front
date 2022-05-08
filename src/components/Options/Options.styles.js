@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const GridContainer = styled.div`
   display: grid;
@@ -12,6 +12,12 @@ export const Button = styled.button`
 
   font-size: 0.9rem;
   cursor: pointer;
+
+  ${({ selected }) =>
+    selected &&
+    css`
+      border: 2px solid red;
+    `}
 `;
 
 export const TitleHighlight = styled.span`

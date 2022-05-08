@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
 const useMultiAudio = (urls) => {
-  const [sources, setSources] = useState([]);
-
   const [players, setPlayers] = useState([]);
 
   const toggle = useCallback(
@@ -29,63 +27,46 @@ const useMultiAudio = (urls) => {
   }, []);
 
   useEffect(() => {
-    stop();
+    setPlayers((currentPlayers) => {
+      currentPlayers.forEach((p) => {
+        p.audio.pause();
+      });
 
-    console.log('urls changed');
-
-    setSources(
-      urls.map((url) => ({
+      return urls.map((url) => ({
         url,
         audio: new Audio(url),
-      })),
-    );
-
-    setPlayers(
-      urls.map((url) => ({
-        url,
         playing: false,
-      })),
-    );
-  }, [urls, stop]);
-
-  useEffect(() => {
-    if (!sources || !players) {
-      return;
-    }
-
-    sources.forEach((source, i) => {
-      if (players[i].playing) {
-        source.audio.play();
-        return;
-      }
-
-      source.audio.pause();
+      }));
     });
-  }, [sources, players]);
+  }, [urls]);
 
   useEffect(() => {
-    if (!sources || !players) {
-      return null;
-    }
-
-    sources.forEach((source, i) => {
-      source.audio.addEventListener('ended', () => {
+    players.forEach((p, i) => {
+      p.audio.addEventListener('ended', () => {
         const newPlayers = [...players];
         newPlayers[i].playing = false;
         setPlayers(newPlayers);
       });
+
+      if (players[i].playing) {
+        // eslint-disable-next-line no-param-reassign
+        p.audio.currentTime = 0;
+        p.audio.play();
+      } else {
+        p.audio.pause();
+      }
     });
 
     return () => {
-      sources.forEach((source, i) => {
-        source.audio.removeEventListener('ended', () => {
+      players.forEach((p, i) => {
+        p.audio.removeEventListener('ended', () => {
           const newPlayers = [...players];
           newPlayers[i].playing = false;
           setPlayers(newPlayers);
         });
       });
     };
-  }, [players, sources]);
+  }, [players]);
 
   return [players, toggle, stop];
 };

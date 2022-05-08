@@ -1,12 +1,11 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Home from '@pages/Home';
 import Play from '@pages/Play';
-import Level from '@components/Level';
-import GlobalProvider from '@contexts';
+import Results from '@pages/Results';
 
-import { phases } from '@constants/phases';
+import GlobalProvider from '@contexts';
 
 import GlobalStyle from '@styles/GlobalStyle';
 
@@ -17,14 +16,8 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route index element={<Home />} />
-          <Route path="play" element={<Play />}>
-            <Route path=":phase" element={<Level />} />
-            <Route
-              index
-              path="*"
-              element={<Navigate to={phases[0]} replace />}
-            />
-          </Route>
+          <Route path="play" element={<Play />} />
+          <Route path="results" element={<Results />} />
         </Routes>
       </BrowserRouter>
     </GlobalProvider>

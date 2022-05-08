@@ -9,12 +9,7 @@ import React, {
 const StemContext = createContext({});
 
 function StemProvider({ children }) {
-  const [stem, setStem] = useState({
-    bass: undefined,
-    drums: undefined,
-    other: undefined,
-    voice: undefined,
-  });
+  const [stem, setStem] = useState();
 
   const appendStem = useCallback((type, value) => {
     setStem((prevStem) => ({
