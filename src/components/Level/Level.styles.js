@@ -1,4 +1,5 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { colors } from '@constants/colors';
 
 export const Container = styled.div`
   min-height: 100vh;
@@ -24,11 +25,12 @@ export const StatusContainer = styled.div`
 `;
 
 export const StatusTitle = styled.h2`
-  margin-bottom: 0;
+  margin-bottom: 30px;
 
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
+  color: ${colors.highlight};
 `;
 
 export const StatusDescription = styled.p`
@@ -43,4 +45,14 @@ export const PlayAgain = styled.button`
   font-size: 1.2rem;
   font-weight: 700;
   cursor: pointer;
+  border-radius: 20px;
+  background-color: ${colors.primary};
+  color: ${colors.background};
+  border-color: ${colors.secondary};
+  border-width: 3px;
+  ${({ disabled }) =>
+    disabled &&
+    css`
+      background-color: ${colors.secondary};
+    `}
 `;

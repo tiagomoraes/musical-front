@@ -1,22 +1,10 @@
-const url = 'http://localhost:3001/';
+import axios from 'axios';
 
-export const getRandomTrack = async () => {
+export const getTrack = async (id) => {
   try {
-    const response = await fetch(url + 'track');
-    const responseJson = await response.json();
-    return responseJson;
+    const { data } = await axios.get(`http://localhost:3001/track/${id}`);
+    return data;
   } catch (error) {
     console.error(error);
   }
 };
-
-export const getAvailableAnswers = async (expectedId) => {
-  try {
-    const response = await fetch(url + 'tracks/' + expectedId);
-    const responseJson = await response.json();
-    return responseJson;
-  } catch (error) {
-    console.error(error);
-  }
-};
-// NADA DISSO SENDO USADO POR ENQUANTO

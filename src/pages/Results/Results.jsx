@@ -7,7 +7,8 @@ import useMultiAudio from '@hooks/useMultiAudio';
 
 import Button from '@components/Button';
 
-import { Container } from './Results.styles';
+import { Container, StatusDescription, StatusTitle } from './Results.styles';
+import { getTrack } from '../../utils/tracks';
 
 function Results() {
   const navigate = useNavigate();
@@ -21,6 +22,11 @@ function Results() {
       Object.entries(stem).map(
         ([type, s]) => `http://localhost:3001/play/${s}/${type}`,
       ),
+    [stem],
+  );
+
+  const obtained = useMemo(
+    () => Object.entries(stem).map(([s]) => getTrack(s)),
     [stem],
   );
 
@@ -59,8 +65,20 @@ function Results() {
 
   return (
     <Container>
-      <h1>{score}</h1>
-      <Button onClick={togglePlaying}>Ver Resultado</Button>
+      <StatusTitle>Pontuação Final: {score}/4</StatusTitle>
+      <StatusDescription>
+        Você escolheu o baixo de {obtained[0]?.name}
+      </StatusDescription>
+      <StatusDescription>
+        Você escolheu a bateria de {obtained[1]?.name}
+      </StatusDescription>
+      <StatusDescription>
+        Você escolheu os instrumentos extras de {obtained[2]?.name}
+      </StatusDescription>
+      <StatusDescription>
+        Você escolheu o vocal de {obtained[3]?.name}
+      </StatusDescription>
+      <Button onClick={togglePlaying('obtained')}>Ouvir Música Gerada</Button>
       <Button onClick={handlePlayAgain}>Jogar Novamente</Button>
     </Container>
   );

@@ -1,5 +1,7 @@
 import styled, { css } from 'styled-components';
 
+import { colors } from '@constants/colors';
+
 export const GridContainer = styled.div`
   display: grid;
   gap: 10px;
@@ -12,11 +14,14 @@ export const Button = styled.button`
 
   font-size: 0.9rem;
   cursor: pointer;
+  background-color: ${colors.highlight};
+  color: ${colors.background};
+  border-color: ${colors.highlight};
 
   ${({ selected }) =>
     selected &&
     css`
-      border: 2px solid red;
+      border: 2px solid ${colors.action};
     `}
 `;
 

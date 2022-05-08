@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { colors } from '@constants/colors';
 
 export const Container = styled.div`
   min-height: 100vh;
@@ -24,11 +25,14 @@ export const StatusTitle = styled.h2`
   font-size: 2rem;
   font-weight: 700;
   text-align: center;
+  color: ${colors.primary};
 `;
 
 export const StatusDescription = styled.p`
   font-size: 1rem;
   text-align: center;
+  color: ${colors.highlight};
+  margin-bottom: -30px;
 `;
 
 export const PlayAgain = styled.button`

@@ -8,7 +8,7 @@ import { getNextPhase } from '@utils/phases';
 import { getName } from '@utils/stems';
 import useMultiAudio from '@hooks/useMultiAudio';
 
-import { Container, PlayAgain } from './Level.styles';
+import { Container, PlayAgain, StatusTitle } from './Level.styles';
 import { useCorrectTrack } from '../../contexts/CorrectTrackProvider';
 
 function Level({ type, goToPhase }) {
@@ -79,6 +79,7 @@ function Level({ type, goToPhase }) {
 
   return (
     <Container key={type}>
+      <StatusTitle>{typeName}</StatusTitle>
       {tracks && (
         <Options
           options={tracks}

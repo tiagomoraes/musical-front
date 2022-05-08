@@ -14,7 +14,6 @@ function Options({ options, selected, type, onOptionClick }) {
             selected={selected === id}
           >
             <TitleHighlight>Opção {index}</TitleHighlight>
-            {type}
           </Button>
         </GridContainer>
       ))}
