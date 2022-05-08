@@ -1,1 +1,1 @@
-export const phases = ['bass', 'drums', 'other', 'voice'];
+export const phases = ['bass', 'drums', 'other', 'vocals'];
