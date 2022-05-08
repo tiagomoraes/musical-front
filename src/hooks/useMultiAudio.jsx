@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 
 const useMultiAudio = (urls) => {
   const [players, setPlayers] = useState([]);
@@ -20,9 +20,15 @@ const useMultiAudio = (urls) => {
     [players],
   );
 
-  const stop = useCallback(() => {
-    setPlayers((oldPlayers) =>
-      oldPlayers.map((p) => ({ ...p, playing: false })),
+  const playAll = useCallback(() => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((p) => ({ ...p, playing: true })),
+    );
+  }, []);
+
+  const stopAll = useCallback(() => {
+    setPlayers((prevPlayers) =>
+      prevPlayers.map((p) => ({ ...p, playing: false })),
     );
   }, []);
 
@@ -72,7 +78,17 @@ const useMultiAudio = (urls) => {
     };
   }, [players]);
 
-  return [players, toggle, stop];
+  const value = useMemo(
+    () => ({
+      players,
+      toggle,
+      playAll,
+      stopAll,
+    }),
+    [playAll, players, stopAll, toggle],
+  );
+
+  return value;
 };
 
 export default useMultiAudio;

@@ -26,8 +26,7 @@ function Level({ type, goToPhase }) {
     [tracks, type],
   );
 
-  const [, toggle] = useMultiAudio(urls || []);
-
+  const { toggle } = useMultiAudio(urls || []);
   const { track: expected } = useCorrectTrack();
 
   const { appendStem } = useStem();
