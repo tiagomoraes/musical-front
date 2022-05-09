@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { colors } from '@constants/colors';
 
 export const Container = styled.div`
   min-height: 100vh;
@@ -15,4 +16,7 @@ export const PlayButton = styled.button`
   font-weight: 700;
 
   cursor: pointer;
+  background-color: ${colors.primary};
+  color: ${colors.background};
+  border-color: ${colors.secondary};
 `;

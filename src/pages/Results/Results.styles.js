@@ -32,7 +32,7 @@ export const StatusDescription = styled.p`
   font-size: 1rem;
   text-align: center;
   color: ${colors.highlight};
-  margin-bottom: -30px;
+  margin-bottom: 3px;
 `;
 
 export const Bold = styled.span`
