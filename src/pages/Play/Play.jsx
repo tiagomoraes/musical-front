@@ -4,7 +4,7 @@ import { phases } from '@constants/phases';
 import { useCorrectTrack } from '@contexts/CorrectTrackProvider';
 import Level from '@components/Level';
 
-import { Container, StatusDescription, StatusTitle } from './Play.styles';
+import { Container, StatusDescription, StatusTitle, Bold } from './Play.styles';
 
 function Play() {
   const { track } = useCorrectTrack();
@@ -15,7 +15,8 @@ function Play() {
     <Container>
       <StatusTitle>{track?.name}</StatusTitle>
       <StatusDescription>
-        Clique na opção correspondente à música {track?.name} de {track?.artist}
+        Clique na opção correspondente à música <Bold>{track?.name}</Bold> de{' '}
+        <Bold>{track?.artist}</Bold>
       </StatusDescription>
       <Level type={phase} goToPhase={setPhase} />
     </Container>

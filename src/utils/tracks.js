@@ -7,4 +7,6 @@ export const getTrack = async (id) => {
   } catch (error) {
     console.error(error);
   }
+
+  return null;
 };

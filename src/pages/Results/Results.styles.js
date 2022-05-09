@@ -35,6 +35,10 @@ export const StatusDescription = styled.p`
   margin-bottom: 3px;
 `;
 
+export const Bold = styled.span`
+  font-weight: 700;
+`;
+
 export const PlayAgain = styled.button`
   padding: 10px 30px;
   margin-top: 30px;

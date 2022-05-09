@@ -18,13 +18,18 @@ function StemProvider({ children }) {
     }));
   }, []);
 
+  const clearStem = useCallback((type, value) => {
+    setStem(undefined);
+  }, []);
+
   const value = useMemo(
     () => ({
       stem,
       setStem,
       appendStem,
+      clearStem,
     }),
-    [appendStem, stem],
+    [appendStem, clearStem, stem],
   );
 
   return <StemContext.Provider value={value}>{children}</StemContext.Provider>;

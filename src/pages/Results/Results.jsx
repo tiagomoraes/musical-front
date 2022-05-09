@@ -6,35 +6,56 @@ import { useCorrectTrack } from '@contexts/CorrectTrackProvider';
 import useMultiAudio from '@hooks/useMultiAudio';
 
 import Button from '@components/Button';
-import { getTrack } from '@utils/tracks';
 
-import { Container, StatusDescription, StatusTitle } from './Results.styles';
+import { getTrack } from '@utils/tracks';
+import {
+  Bold,
+  Container,
+  StatusDescription,
+  StatusTitle,
+} from './Results.styles';
 
 function Results() {
   const navigate = useNavigate();
   const [playing, setPlaying] = useState(false);
+  const [populatedStems, setPopulatedStems] = useState();
 
-  const { stem } = useStem();
-  const { track } = useCorrectTrack();
+  const { stem, clearStem } = useStem();
+  const { track, updateTrack } = useCorrectTrack();
 
-  const urls = useMemo(
-    () =>
-      Object.entries(stem).map(
-        ([type, s]) => `http://localhost:3001/play/${s}/${type}`,
-      ),
-    [stem],
-  );
+  const urls = useMemo(() => {
+    if (!stem) {
+      return [];
+    }
 
-  const obtained = useMemo(
-    () => Object.entries(stem).map(([s]) => getTrack(s)),
-    [stem],
-  );
+    return Object.entries(stem)?.map(
+      ([type, s]) => `http://localhost:3001/play/${s}/${type}`,
+    );
+  }, [stem]);
 
-  const { playAll, stopAll } = useMultiAudio(urls || []);
+  const score = useMemo(() => {
+    if (!stem) {
+      return 0;
+    }
 
-  const handlePlayAgain = () => {
+    let counter = 0;
+
+    Object.values(stem)?.forEach((stemId) => {
+      if (stemId === track?.id) {
+        counter += 1;
+      }
+    });
+
+    return counter;
+  }, [stem, track?.id]);
+
+  const { playAll, stopAll } = useMultiAudio(urls);
+
+  const handlePlayAgain = useCallback(() => {
+    updateTrack();
+    clearStem();
     navigate('/');
-  };
+  }, [clearStem, navigate, updateTrack]);
 
   const togglePlaying = useCallback(() => {
     if (playing) {
@@ -46,39 +67,65 @@ function Results() {
     }
   }, [playAll, playing, stopAll]);
 
-  const score = useMemo(() => {
-    let counter = 0;
-    Object.values(stem).forEach((stemId) => {
-      if (stemId === track?.id) {
-        counter += 1;
-      }
-    });
+  const fetchPopulatedStems = useCallback(async () => {
+    if (!stem) {
+      return;
+    }
 
-    return counter;
-  }, [stem, track?.id]);
+    const res = await Promise.all(
+      Object.entries(stem)?.map(async ([key, value]) => {
+        const trackObject = await getTrack(value);
+        return {
+          key,
+          value: trackObject,
+        };
+      }),
+    );
+
+    const find = (desiredKey) =>
+      res.find(({ key }) => key === desiredKey)?.value;
+
+    setPopulatedStems({
+      bass: find('bass'),
+      drums: find('drums'),
+      other: find('other'),
+      vocals: find('vocals'),
+    });
+  }, [stem]);
 
   useEffect(() => {
     if (!stem) {
-      navigate('/');
+      handlePlayAgain();
     }
-  }, [navigate, stem]);
+  }, [handlePlayAgain, stem]);
+
+  useEffect(() => {
+    if (stem) {
+      fetchPopulatedStems();
+    }
+  }, [fetchPopulatedStems, stem]);
 
   return (
     <Container>
       <StatusTitle>Pontuação Final: {score}/4</StatusTitle>
-      <StatusDescription>
-        Você escolheu o baixo de {obtained[0]?.name}
-      </StatusDescription>
-      <StatusDescription>
-        Você escolheu a bateria de {obtained[1]?.name}
-      </StatusDescription>
-      <StatusDescription>
-        Você escolheu os instrumentos extras de {obtained[2]?.name}
-      </StatusDescription>
-      <StatusDescription>
-        Você escolheu o vocal de {obtained[3]?.name}
-      </StatusDescription>
-      <Button onClick={togglePlaying('obtained')}>Ouvir Música Gerada</Button>
+      {populatedStems && (
+        <>
+          <StatusDescription>
+            Você escolheu o baixo de <Bold>{populatedStems.bass?.name}</Bold>
+          </StatusDescription>
+          <StatusDescription>
+            Você escolheu a bateria de <Bold>{populatedStems.drums?.name}</Bold>
+          </StatusDescription>
+          <StatusDescription>
+            Você escolheu os instrumentos extras de{' '}
+            <Bold>{populatedStems.other?.name}</Bold>
+          </StatusDescription>
+          <StatusDescription>
+            Você escolheu o vocal de <Bold>{populatedStems.vocals?.name}</Bold>
+          </StatusDescription>
+        </>
+      )}
+      <Button onClick={togglePlaying}>Ouvir Música Gerada</Button>
       <Button onClick={handlePlayAgain}>Jogar Novamente</Button>
     </Container>
   );
