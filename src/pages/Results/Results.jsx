@@ -6,9 +6,9 @@ import { useCorrectTrack } from '@contexts/CorrectTrackProvider';
 import useMultiAudio from '@hooks/useMultiAudio';
 
 import Button from '@components/Button';
+import { getTrack } from '@utils/tracks';
 
 import { Container, StatusDescription, StatusTitle } from './Results.styles';
-import { getTrack } from '../../utils/tracks';
 
 function Results() {
   const navigate = useNavigate();
