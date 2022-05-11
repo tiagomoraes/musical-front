@@ -2,7 +2,7 @@ const stemsByType = {
   bass: 'Baixo',
   drums: 'Bateria',
   other: 'Outros',
-  voice: 'Vocal',
+  vocals: 'Vocal',
 };
 
 export const getName = (type) => stemsByType[type];
