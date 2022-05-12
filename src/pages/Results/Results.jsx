@@ -4,10 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useStem } from '@contexts/StemProvider';
 import { useCorrectTrack } from '@contexts/CorrectTrackProvider';
 import useMultiAudio from '@hooks/useMultiAudio';
+import { getTrack } from '@utils/tracks';
+import { STORAGE_URL } from '@constants/remote';
 
 import Button from '@components/Button';
 
-import { getTrack } from '@utils/tracks';
 import {
   Bold,
   Container,
@@ -29,7 +30,7 @@ function Results() {
     }
 
     return Object.entries(stem)?.map(
-      ([type, s]) => `http://localhost:3001/play/${s}/${type}`,
+      ([type, s]) => `${STORAGE_URL}/${s}-${type}.mp3`,
     );
   }, [stem]);
 

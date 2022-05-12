@@ -6,8 +6,9 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-
 import axios from 'axios';
+
+import { API_URL } from '@constants/remote';
 
 const CorrectTrackContext = createContext({});
 
@@ -16,7 +17,7 @@ function CorrectTrackProvider({ children }) {
 
   const fetchTrack = useCallback(async () => {
     try {
-      const { data } = await axios.get('http://localhost:3001/track');
+      const { data } = await axios.get(`${API_URL}/track`);
       setTrack(data);
     } catch (error) {
       console.error(error);

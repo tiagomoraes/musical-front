@@ -7,9 +7,10 @@ import { useStem } from '@contexts/StemProvider';
 import { getNextPhase } from '@utils/phases';
 import { getName } from '@utils/stems';
 import useMultiAudio from '@hooks/useMultiAudio';
+import { useCorrectTrack } from '@contexts/CorrectTrackProvider';
+import { API_URL, STORAGE_URL } from '@constants/remote';
 
 import { Container, PlayAgain, StatusTitle } from './Level.styles';
-import { useCorrectTrack } from '../../contexts/CorrectTrackProvider';
 
 function Level({ type, goToPhase }) {
   const [tracks, setTracks] = useState();
@@ -22,7 +23,7 @@ function Level({ type, goToPhase }) {
   const typeName = useMemo(() => getName(type), [type]);
 
   const urls = useMemo(
-    () => tracks?.map((id) => `http://localhost:3001/play/${id}/${type}`),
+    () => tracks?.map((id) => `${STORAGE_URL}/${id}-${type}.mp3`),
     [tracks, type],
   );
 
@@ -33,9 +34,7 @@ function Level({ type, goToPhase }) {
 
   const fetchTracks = useCallback(async () => {
     try {
-      const { data } = await axios.get(
-        `http://localhost:3001/tracks/${expected.id}`,
-      );
+      const { data } = await axios.get(`${API_URL}/tracks/${expected.id}`);
       setTracks(data);
     } catch (error) {
       console.error(error);
@@ -62,7 +61,14 @@ function Level({ type, goToPhase }) {
       }
 
       toggle(clickedIndex);
-      setSelected(id);
+
+      setSelected((prevId) => {
+        if (prevId === id) {
+          return undefined;
+        }
+
+        return id;
+      });
     },
     [toggle, tracks],
   );
